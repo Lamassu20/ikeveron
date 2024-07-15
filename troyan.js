@@ -342,12 +342,12 @@ function updateTheme() {
             break;
         case 8:
             //quotes
-            ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://s6.ezgif.com/tmp/ezgif-6-5ea3e596f8.gif) !important;}', 0);
-            ss.insertRule('.fade-box {background: url(https://s6.ezgif.com/tmp/ezgif-6-5ea3e596f8.gif) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: url(https://s6.ezgif.com/tmp/ezgif-6-5ea3e596f8.gif) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: url(https://s6.ezgif.com/tmp/ezgif-6-5ea3e596f8.gif) !important;}', 0);
-            ss.insertRule('.replay-list {background: url(https://s6.ezgif.com/tmp/ezgif-6-5ea3e596f8.gif) !important;}', 0);
-            ss.insertRule('.tooltip {background: url(https://s6.ezgif.com/tmp/ezgif-6-5ea3e596f8.gif) !important;}', 0);
+            ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
+            ss.insertRule('.fade-box {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
+            ss.insertRule('.swal2-popup {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
+            ss.insertRule('.replay-list-header {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
+            ss.insertRule('.replay-list {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
+            ss.insertRule('.tooltip {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
             amountRulesAdded = 6;
             break;
         case 9:
