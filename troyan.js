@@ -892,4 +892,4 @@ function setupAccountBelow() {
     setupAccountBelow();
 })();
     }
-    setTimeout(startTimer, 20000);
+    setTimeout(startTimer, 1500);
