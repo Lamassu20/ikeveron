@@ -1,844 +1,895 @@
-//global stuff
-const screenwidth = screen.width;
-const version = "2.1.6";
-const latestFeatures = `Latest features: Fixed bug where some settings don't save when reloading page, Fixed bug where this text didn't show properly (lol)`;
-const ss = document.styleSheets[0];
-const socialContainer = document.querySelector(".social-container");
-socialContainer.style.width = "auto";
-const messageList = document.querySelector(".message-list");
-let colorCode = 0;
-let css = document.createElement("style");
-document.head.appendChild(css);
-css.appendChild(document.createTextNode(`
-    .social-container[data-v-3d4cb83d] {
-        max-width: 1000px;
-    }
-    .vanis-menu-button {
-        background: #b1700f;
-        border: 0;
-        border-radius: 4px;
-        box-shadow: 0 0 1px 1px #000;
-        color: #dadada;
-        cursor: pointer;
-        font-size: 16px;
-        outline: none;
-        padding: 5px 9px;
-        text-shadow: 1px 1px 2px #000;
-    }
-    .vanis-menu-tf {
-        background: rgba(0,0,0,.5);
-        border: 1px solid #000;
-        border-radius: 4px;
-        box-sizing: border-box;
-        color: #dadada;
-        display: block;
-        outline: 0;
-        padding: 5px;
-        width: 100%;
-
-    }
-    .mt10 {
-        margin-top: 10px;
-    }
-    `
-));
-//setting variables
-let amountRulesAdded = 0;
-
-let theme = parseInt(localStorage?.getItem("theme")) ?? 0;
-let adblocker = localStorage?.getItem("adblocker") === "true" ?? false;
-let oldChatStyling = localStorage.getItem("oldChatStyling") === "true" ?? true;
-let rainbowTime = localStorage.getItem("rainbowTime") === "true" ?? false;
-let messageTime = localStorage.getItem("messageTime") === "true" ?? true;
-let msDigits = parseInt(localStorage.getItem("msDigits")) ?? 1;
-let rainbowText = localStorage.getItem("rainbowText") === "true" ?? false;
-let deleteStatScreenAd = localStorage.getItem("deleteStatScreenAd") === "true" ?? false;
-let extOptionsHidden = localStorage.getItem("extOptionsHidden") === "true" ?? false;
-
-updateTheme();
-addChangeThemeButton();
-if (adblocker) {
-    lowerPlayerData();
+    function startTimer() {
+       var zindexForContainerAndSocialFix = document.createElement("style");
+       zindexForContainerAndSocialFix.appendChild(document.createTextNode(`
+.container{
+    z-index: 1;
 }
-if (oldChatStyling) {
-    makeOldChatStyling();
-}
-addOptionsMenu();
-addBigChatButton();
-addResetMessageTimeColorButton()
-addTimeToMessages();
-addAnimations();
-if (rainbowText) {
-    makeRainbowText();
-}
-if (deleteStatScreenAd) {
-    deleteStatScreenAdd();
-}
-addExtOptionsToggleButton();
-
-
-
-
-
-
-
-
-
-
-
-
-
-let css1 = document.createElement("style");
-document.head.appendChild(css1);
-css1.appendChild(document.createTextNode(`
-        .progress-striped .progress-bar[data-v-5f2d6d72] {
-            background: repeating-linear-gradient(-45deg,#e08e13,#e08e13 25px,#b1700f 0,#b1700f 50px);
-            background-size: 2000% 2000%;
-            animation: gradient 100s linear infinite;
-        }
-        @keyframes gradient {
-            100% {
-                background-position: 100% 100%;
-            }
-        }
-    `
-                                         ));
-
-
-
-
-
-
-
-
-function toggleDate() {
-    const minimapStatsElement = document.querySelector('.minimap-stats');
-    const dateElement = minimapStatsElement.querySelector('.date-element');
-
-    if (dateElement) {
-        minimapStatsElement.removeChild(dateElement);
-        localStorage.setItem('dateVisible', 'false');
-    } else {
-        const newDateElement = document.createElement('div');
-        newDateElement.classList.add('date-element');
-        newDateElement.style.display = 'block';
-
-        const currentDate = new Date();
-        let month = currentDate.getMonth() + 1;
-        if (month < 10) {
-            month = '0' + month;
-        }
-        const dateString = `${currentDate.getDate()}.${month}.${currentDate.getFullYear()}`;
-        newDateElement.textContent = dateString;
-        const children = minimapStatsElement.children;
-        minimapStatsElement.insertBefore(newDateElement, children[1]);
-        localStorage.setItem('dateVisible', 'true');
-    }
-}
-function initializeDate() {
-    const dateVisible = localStorage.getItem('dateVisible');
-    if (dateVisible === 'true') {
-        const minimapStatsElement = document.querySelector('.minimap-stats');
-        const newDateElement = document.createElement('div');
-        newDateElement.classList.add('date-element');
-        newDateElement.style.display = 'block';
-        const currentDate = new Date();
-        let month = currentDate.getMonth() + 1;
-        if (month < 10) {
-            month = '0' + month;
-        }
-        const dateString = `${currentDate.getDate()}.${month}.${currentDate.getFullYear()}`;
-        newDateElement.textContent = dateString;
-        const children = minimapStatsElement.children;
-        minimapStatsElement.insertBefore(newDateElement, children[1]);
-    }
-}
-
-const optionsMenu = document.getElementById('ext-options-general');
-const toggleDateButton = document.createElement('button');
-toggleDateButton.textContent = 'Toggle Date';
-toggleDateButton.classList.add('vanis-menu-button', 'mt10');
-toggleDateButton.addEventListener('click', toggleDate);
-optionsMenu.appendChild(toggleDateButton);
-initializeDate();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function addAnimations() {
-    css.appendChild(document.createTextNode(`
-@keyframes menuFlashing {
-    0%   {background: white;}
-  100%  {background: black;}
-  }
-@keyframes colorRotate {
-    from {
-      color: #6666ff;
-    }
-    10% {
-      color: #0099ff;
-    }
-    50% {
-      color: #00ff00;
-    }
-    75% {
-      color: #ff3399;
-    }
-    100% {
-      color: #6666ff;
-    }
-  }
-#theme-plus:hover{
-    background:#007777;
-    transition:all .4s ease;
-}
-#theme-minus:hover{
-    background:#007777;
-    transition:all .4s ease;
+.social-container[data-v-3d4cb83d] {
+    max-width: 830px!important;
 }
 `));
+document.head.appendChild(zindexForContainerAndSocialFix);
+
+let smallContainer, section, privacyLink, tosLink, moveLinksCheckbox, hideSocialContainerCheckbox, toggleDateCheckbox, togglePressedKeysCheckbox, toggleMousePos, toggleReverseMenu, toggleAccountBelow, dateElement, minimapStatsElement;
+let keyCounts = {};
+let activeDiv = null;
+let keyTimers = {};
+
+
+const styles = `
+.section[data-v-c41b640a] {
+    border: 2px solid #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.section > .header[data-v-c41b640a] {
+    background: rgba(0,0,0,.5);
+    text-align: center;
+    border-bottom: 2px solid #000;
+    padding: 7px;
+    padding-left: 10px;
+}
+.settings-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px;
+    align-self: stretch;
+    gap: 27px;
+    color: #dadada;
+}
+.settings-column-1, .settings-column-2 {
+    flex: 1;
+    font-size: 16px;
+}
+.settings-column-2 {
+    margin-left: 0px;
+}
+.zxc4{
+    background: #b1700f;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 0 1px 1px #000;
+    color: #dadada;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    padding: 5px 9px;
+    text-shadow: 1px 1px 2px #000;
+    margin: 15px;
+    margin-top: 5px;
+}
+.zxc3 {
+    background: #b1700f;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 0 1px 1px #000;
+    color: #dadada;
+    cursor: pointer;
+    font-size: 16px;
+    outline: none;
+    padding: 5px 9px;
+    text-shadow: 1px 1px 2px #000;
+    margin-left: 0px;
+    margin-top: 0px;
+}
+.zxc1 {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 450px;
+    height: auto;
+    background-color: rgba(0,0,0,0.5);
+    padding: 10px;
+    margin-top: 5px;
+    padding-bottom: 10px;
+}
+.custom-checkbox {
+    display: block;
+}
+.custom-checkbox label {
+    display: inline-block;
+    vertical-align: middle;
+    color: #dadada;
+}
+.custom-checkbox input {
+    vertical-align: middle;
+    margin-right: 5px;
+    cursor: pointer;
+}
+.checkbox-button-wrapper {
+    display: flex;
+    align-items: center;
 }
 
-function lowerPlayerData() {
-    document.getElementById("player-data").style.marginTop = "300px";
+.checkbox-button-wrapper .zxc3 {
+    margin-left: 10px;
+}
+
+.color-picker-1 {
+    display: block;
+    margin-top: 15px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+.color-picker-2 {
+    display: block;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 5px;
+}
+.color-picker-3 {
+    display: block;
+    margin-top: 5px;
+    margin-left: 5px;
+    margin-bottom: 10px;
+}
+`;
+
+
+function createSmallContainer() {
+    const container = document.createElement('div');
+    container.className = 'small-container zxc1 fade-box tab-menu';
+    container.style.display = localStorage.getItem('smallContainerVisible') === 'true' ? 'block' : 'none';
+
+    const existingLineElement = document.querySelector('span[data-v-ba56a55e].line');
+    if (existingLineElement) {
+        existingLineElement.addEventListener('click', () => {
+            const isVisible = container.style.display === 'none';
+            container.style.display = isVisible ? 'block' : 'none';
+            localStorage.setItem('smallContainerVisible', isVisible);
+        });
+    }
+    return container;
+}
+
+function createSection() {
+    const section = document.createElement('div');
+    section.className = 'section';
+    section.setAttribute('data-v-c41b640a', '');
+    section.innerHTML = `
+        <div class="header" data-v-c41b640a>⁺‧₊˚ཐི⋆♱⋆ཋྀ˚₊‧⁺⁺‧₊˚ᄿ༺ཐིㅤ ㅤཋྀ༻ᄽ˚₊‧⁺⁺‧₊˚ཐི⋆♱⋆ཋྀ˚₊‧⁺</div>
+        <div class="settings-container">
+            <div class="settings-column-1">
+                ${createCheckbox('hideSocialContainerCheckbox', 'Hide Social Container')}
+                ${createCheckbox('moveLinksCheckbox', 'Hide links')}
+        <div class="checkbox-button-wrapper">
+            ${createCheckbox('customThemeCheckbox', 'Your Theme')}
+            <button class="zxc3" id="settingsButton">Settings</button>
+            </div>
+            </div>
+            <div class="settings-column-2">
+                ${createCheckbox('reverseMenuCheckbox', 'Reversed Menu')}
+                ${createCheckbox('accountBelowCheckbox', 'Account Below')}
+                ${createCheckbox('toggleDateCheckbox', 'Show Current Date')}
+                ${createCheckbox('togglePressedKeysCheckbox', 'Show Pressed Keys')}
+                ${createCheckbox('toggleMousePos', 'Show Mouse Position')}
+            </div>
+        </div>
+    `;
+    return section;
 }
 
 
-function addChangeThemeButton() {
 
-    //Change Theme parent button
-    let amountThemes = 16;
-    const themeButton = document.createElement('div');
-    themeButton.id = "theme-button";
-    themeButton.style.display = "flex";
-    themeButton.style.background = "#008b8b"; //=darkcyan
-    themeButton.style.textShadow = "1px 1px 2px #000";
-    themeButton.style.borderRadius = "4px";
-    themeButton.style.margin = "0px 4px";
-    themeButton.style.boxShadow = '0 0 1px 1px #000';
-    themeButton.style.textAlign = "center";
+function createCheckbox(id, label) {
+    return `
+    <div class="custom-checkbox">
+        <label>
+            <input type="checkbox" id="${id}">
+            ${label}
+        </label>
+    </div>`;
+}
 
-    //Change Theme text
-    const themeButtonText = document.createElement('div');
-    themeButtonText.id = "theme-button-text";
-    themeButtonText.style.margin = "5px 0px";
-    themeButtonText.innerHTML = "Theme " + theme;
-    // themeButtonText.style.borderLeft = "1px solid black";
-    // themeButtonText.style.borderRight = "1px solid black";
-    themeButtonText.style.padding = "0px 5px";
 
-    //minus button
-    const themeMinus = document.createElement('div');
-    themeMinus.id = "theme-minus";
-    themeMinus.innerHTML = "-";
-    themeMinus.style.width = "45px";
-    themeMinus.style.cursor = "pointer";
-    themeMinus.style.padding = "5px 0px";
-    themeMinus.style.borderTopLeftRadius = "4px";
-    themeMinus.style.borderBottomLeftRadius = "4px";
-    themeMinus.onclick = function () {
-        theme--;
-        if (theme == -1) {
-            theme = amountThemes - 1;
+
+
+function resetThemeToDefault() {
+    // Значения по умолчанию
+    const defaultColor1 = '#273b5e';
+    const defaultColor2 = '#0f1724';
+    const defaultColor3 = '#001121';
+
+    // Обновляем пипетки цветов
+    const colorPicker1 = document.querySelector('.color-picker-1');
+    const colorPicker2 = document.querySelector('.color-picker-2');
+    const colorPicker3 = document.querySelector('.color-picker-3');
+
+    if (colorPicker1 && colorPicker2 && colorPicker3) {
+        colorPicker1.value = defaultColor1;
+        colorPicker2.value = defaultColor2;
+        colorPicker3.value = defaultColor3;
+    }
+
+    // Обновляем стили
+    updateFadeBoxStyles(defaultColor1, defaultColor2, defaultColor3);
+
+    // Сохраняем эти значения в localStorage
+    saveColorsToLocalStorage(defaultColor1, defaultColor2, defaultColor3);
+}
+
+// Измените создание контейнера, чтобы добавить обработчик события для кнопки Reset
+
+
+
+
+
+// Создайте контейнер с классом fade-box
+function createCustomThemeContainer() {
+    const customContainer = document.createElement('div');
+    customContainer.className = 'fade-box custom-theme-container';
+    customContainer.style.display = 'none';
+    customContainer.style.position = 'absolute';
+    customContainer.style.width = '180px';
+    customContainer.style.height = 'auto';
+    customContainer.style.backgroundColor = '#ffffff00';
+    customContainer.style.left = '-196px';
+    customContainer.style.top = '0px';
+
+    // Получаем сохраненные цвета из localStorage
+    const [savedColor1, savedColor2, savedColor3] = loadColorsFromLocalStorage();
+
+    customContainer.innerHTML = `
+        <div class="color-picker-group" style="display: flex; align-items: center;">
+            <label for="colorPicker1" style="margin-left: 15px;">Bg color 1:</label>
+            <input type="color" class="color-picker-1" id="colorPicker1" value="${savedColor1}">
+        </div>
+        <div class="color-picker-group" style="display: flex; align-items: center;">
+            <label for="colorPicker2" style="margin-left: 15px;">Bg color 2:</label>
+            <input type="color" class="color-picker-2" id="colorPicker2" value="${savedColor2}">
+        </div>
+        <div class="color-picker-group" style="display: flex; align-items: center;">
+            <label for="colorPicker3" style="margin-left: 15px;">Overlay color:</label>
+            <input type="color" class="color-picker-3" id="colorPicker3" value="${savedColor3}">
+        </div>
+        <button class="zxc4">Reset to default</button>
+    `;
+
+    // Добавьте ваш контейнер к small-container
+    const smallContainer = document.querySelector('.small-container.zxc1.fade-box.tab-menu');
+    if (smallContainer) {
+        smallContainer.appendChild(customContainer);
+    }
+
+    // Привязываем функцию сброса к кнопке
+    const resetButton = customContainer.querySelector('.zxc4');
+    if (resetButton) {
+        resetButton.addEventListener('click', resetThemeToDefault);
+    }
+
+    // Обновляем стили на основе сохраненных цветов
+    updateFadeBoxStyles(savedColor1, savedColor2, savedColor3);
+
+    return customContainer;
+}
+
+
+function saveColorsToLocalStorage(color1, color2, color3) {
+    localStorage.setItem('colorPicker1', color1);
+    localStorage.setItem('colorPicker2', color2);
+    localStorage.setItem('colorPicker3', color3);
+}
+
+// Функция для загрузки цветов из localStorage
+function loadColorsFromLocalStorage() {
+    const color1 = localStorage.getItem('colorPicker1') || '#273b5e'; // Значение по умолчанию
+    const color2 = localStorage.getItem('colorPicker2') || '#0f1724'; // Значение по умолчанию
+    const color3 = localStorage.getItem('colorPicker3') || '#001121'; // Значение по умолчанию
+    return [color1, color2, color3];
+}
+function updateFadeBoxStyles(color1, color2, color3) {
+    let styleElement = document.getElementById('customFadeBoxStyles');
+
+    if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = 'customFadeBoxStyles';
+        document.head.appendChild(styleElement);
+    }
+    const color3wopacity = convertHexToRgba(color3, 0.75);
+    styleElement.textContent = `
+        .fade-box{
+            background: linear-gradient(to right bottom, ${color1}, ${color2})!important;
         }
-        updateTheme();
-        themeButtonText.innerHTML = "Theme " + theme;
+        ::-webkit-scrollbar-thumb {
+            background-color: ${color1} !important;
+        }
+        .replay-list-header {
+            background: linear-gradient(to right bottom, ${color1}, ${color2})!important;
+        }
+        .swal2-popup {
+            background: linear-gradient(to right bottom, ${color1}, ${color2})!important;
+        }
+        .tooltip {
+            background: linear-gradient(to right bottom, ${color1}, ${color2})!important;
+        }
+        #overlay {
+            background: radial-gradient(${color3wopacity} 300px,rgba(0,0,0,.75))!important;
+}
+    `;
+}
+
+function convertHexToRgba(hex, opacity) {
+    let r = 0, g = 0, b = 0;
+    if (hex.length === 4) {
+        r = parseInt(hex[1] + hex[1], 16);
+        g = parseInt(hex[2] + hex[2], 16);
+        b = parseInt(hex[3] + hex[3], 16);
+    } else if (hex.length === 7) {
+        r = parseInt(hex[1] + hex[2], 16);
+        g = parseInt(hex[3] + hex[4], 16);
+        b = parseInt(hex[5] + hex[6], 16);
+    }
+    return `rgba(${r},${g},${b},${opacity})`;
+}
+
+function updateFadeBoxColors() {
+    const colorPicker1 = document.querySelector('.color-picker-1');
+    const colorPicker2 = document.querySelector('.color-picker-2');
+    const colorPicker3 = document.querySelector('.color-picker-3');
+
+    if (colorPicker1 && colorPicker2 && colorPicker3) {
+        const color1 = colorPicker1.value;
+        const color2 = colorPicker2.value;
+        const color3 = colorPicker3.value;
+        updateFadeBoxStyles(color1, color2, color3);
+        saveColorsToLocalStorage(color1, color2, color3); // Сохранение цветов в localStorage
+    }
+}
+function toggleThemeButtons() {
+    const themeButtonElements = document.querySelectorAll('#theme-button');
+    const customThemeCheckbox = document.querySelector('#customThemeCheckbox');
+
+    if (customThemeCheckbox && themeButtonElements.length > 0) {
+        const isChecked = customThemeCheckbox.checked;
+
+        themeButtonElements.forEach(button => {
+            button.style.pointerEvents = isChecked ? 'none' : 'auto';
+            button.style.opacity = isChecked ? '0.5' : '1'; // Optional: to visually indicate disabled state
+        });
+    }
+}
+
+function setupCustomThemeButton() {
+    const button = document.querySelector('.zxc3');
+    const customContainer = createCustomThemeContainer();
+    const customThemeCheckbox = document.querySelector('#customThemeCheckbox');
+    const customThemeContainer = document.querySelector('.fade-box.custom-theme-container');
+
+    button.addEventListener('click', () => {
+        const isVisible = customContainer.style.display === 'none';
+        customContainer.style.display = isVisible ? 'block' : 'none';
+    });
+
+    customThemeCheckbox.addEventListener('change', () => {
+        const isChecked = customThemeCheckbox.checked;
+        localStorage.setItem('customThemeCheckboxChecked', isChecked);
+        applyCustomThemeStyles(isChecked);
+        toggleThemeButtons(); // Update button clickability based on checkbox state
+
+        // Disable or enable the "Settings" button based on the checkbox state
+        button.disabled = !isChecked;
+        button.style.opacity = isChecked ? '1' : '0.5'; // Optional: visually indicate disabled state
+        button.style.cursor = isChecked ? 'pointer' : 'auto'; // Optional: change cursor for disabled state
+    });
+
+    // Set initial state
+    const isCustomThemeChecked = localStorage.getItem('customThemeCheckboxChecked') === 'true';
+    customThemeCheckbox.checked = isCustomThemeChecked;
+    applyCustomThemeStyles(isCustomThemeChecked);
+    toggleThemeButtons(); // Update button clickability based on initial state
+
+    // Add event listeners for color pickers
+    const colorPicker1 = customContainer.querySelector('.color-picker-1');
+    const colorPicker2 = customContainer.querySelector('.color-picker-2');
+    const colorPicker3 = customContainer.querySelector('.color-picker-3');
+
+    if (colorPicker1) {
+        colorPicker1.addEventListener('input', updateFadeBoxColors);
     }
 
-    //plus button
-    const themePlus = document.createElement('div');
-    themePlus.id = "theme-plus";
-    themePlus.innerHTML = "+";
-    themePlus.style.width = "45px";
-    themePlus.style.cursor = "pointer";
-    themePlus.style.padding = "5px 0px";
-    themePlus.style.borderTopRightRadius = "4px";
-    themePlus.style.borderBottomRightRadius = "4px";
-    themePlus.onclick = function () {
-        theme++;
-        theme = theme % amountThemes;
-        updateTheme();
-
-        themeButtonText.innerHTML = "Theme " + theme;
+    if (colorPicker2) {
+        colorPicker2.addEventListener('input', updateFadeBoxColors);
     }
 
-    themeButton.appendChild(themeMinus);
-    themeButton.appendChild(themeButtonText);
-    themeButton.appendChild(themePlus);
-    socialContainer.appendChild(themeButton);
+    if (colorPicker3) {
+        colorPicker3.addEventListener('input', updateFadeBoxColors);
+    }
+
+    // Set initial state for "Settings" button
+    button.disabled = !isCustomThemeChecked;
+    button.style.opacity = isCustomThemeChecked ? '1' : '0.5';
+    button.style.cursor = isCustomThemeChecked ? 'pointer' : 'auto';
 }
 
 
-function updateTheme() {
-    const misaversUrl = "https://media.discordapp.net/attachments/845354922773315604/933726781767311420/image0-4-1.gif?ex=669680d4&is=66952f54&hm=591153df2f864a5784b1f3265376ee6f23b944beb78cba1dc09e8298b85ff7e8&";
-    const misaversUrl2 = "https://s6.ezgif.com/tmp/ezgif-6-5ea3e596f8.gif";
-    for (let i = 0; i < amountRulesAdded; i++) {
-        ss.deleteRule(0);
+
+
+
+function applyCustomThemeStyles(isChecked) {
+    const color1 = localStorage.getItem('colorPicker1') || '#273b5e';
+    const color2 = localStorage.getItem('colorPicker2') || '#0f1724';
+    const color3 = localStorage.getItem('colorPicker3') || '#001121';
+
+    let styleElement = document.getElementById('customFadeBoxStyles');
+
+    const customThemeContainer = document.querySelector('.fade-box.custom-theme-container');
+    if (customThemeContainer) {
+        customThemeContainer.style.display = isChecked ? 'block' : 'none';
     }
-    let basicTheme = (primary, secondary, rad1, rad2, rad3) => {
-        ss.insertRule(`::-webkit-scrollbar-thumb {background-color: ${primary} !important;}`, 0);
-        ss.insertRule(`#overlay {background: radial-gradient(rgba(${rad1}, ${rad2}, ${rad3}, 0.75) 300px,rgba(0,0,0,.75)) !important;}`, 0);
-        ss.insertRule(`.fade-box, .replay-list-header, .swal2-popup, .tooltip {background: linear-gradient(to right bottom, ${primary}, ${secondary}) !important;}`, 0);
-        return 3;
+
+    if (!styleElement) {
+        styleElement = document.createElement('style');
+        styleElement.id = 'customFadeBoxStyles';
+        document.head.appendChild(styleElement);
     }
-    switch (theme) {
+
+    const color3wopacity = convertHexToRgba(color3, 0.75);
+    if (isChecked) {
+        styleElement.textContent = `
+            .fade-box{
+                background: linear-gradient(to right bottom, ${color1}, ${color2})!important;
+            }
+            ::-webkit-scrollbar-thumb {
+                background-color: ${color1} !important;
+            }
+            .replay-list-header {
+                background: linear-gradient(to right bottom, ${color1}, ${color2})!important;
+            }
+            .swal2-popup {
+                background: linear-gradient(to right bottom, ${color1}, ${color2})!important;
+            }
+            .tooltip {
+                background: linear-gradient(to right bottom, ${color1}, ${color2})!important;
+            }
+            #overlay {
+                background: radial-gradient(${color3wopacity} 300px,rgba(0,0,0,.75))!important;
+            }
+        `;
+    } else {
+        styleElement.textContent = `
+            .fade-box{
+                background: linear-gradient(to right bottom, ${color1}, ${color2});
+            }
+            ::-webkit-scrollbar-thumb {
+                background-color: ${color1};
+            }
+            .replay-list-header {
+                background: linear-gradient(to right bottom, ${color1}, ${color2});
+            }
+            .swal2-popup {
+                background: linear-gradient(to right bottom, ${color1}, ${color2});
+            }
+            .tooltip {
+                background: linear-gradient(to right bottom, ${color1}, ${color2});
+            }
+            #overlay {
+                background: radial-gradient(${color3wopacity} 300px,rgba(0,0,0,.75));
+            }
+        `;
+    }
+}
+
+
+
+
+function setupMoveLinks() {
+    moveLinksCheckbox = section.querySelector('#moveLinksCheckbox');
+    privacyLink = document.querySelector('a[href="privacy.html"][data-v-ba56a55e]');
+    tosLink = document.querySelector('a[href="tos.html"][data-v-ba56a55e]');
+
+    const moveLinksUp = () => {
+        if (moveLinksCheckbox.checked) {
+            privacyLink.style.transform = 'translateY(-10000px)';
+            tosLink.style.transform = 'translateY(-10000px)';
+        } else {
+            privacyLink.style.transform = '';
+            tosLink.style.transform = '';
+        }
+    };
+
+    if (localStorage.getItem('moveLinksChecked') === 'true') {
+        moveLinksCheckbox.checked = true;
+        moveLinksUp();
+    }
+
+    moveLinksCheckbox.addEventListener('change', () => {
+        moveLinksUp();
+        localStorage.setItem('moveLinksChecked', moveLinksCheckbox.checked);
+    });
+}
+function setupHideSocialContainer() {
+    const toggleHideSocialContainer = section.querySelector('#hideSocialContainerCheckbox');
+    const socialContainer = document.querySelector('.social-container[data-v-3d4cb83d]');
+
+    const applyHideSocialContainer = () => {
+        if (toggleHideSocialContainer.checked) {
+            socialContainer.style.transform = 'translateY(-10000px)';
+        } else {
+            socialContainer.style.transform = '';
+        }
+    };
+
+    if (localStorage.getItem('hideSocialContainerChecked') === 'true') {
+        toggleHideSocialContainer.checked = true;
+        applyHideSocialContainer();
+    }
+
+    toggleHideSocialContainer.addEventListener('change', () => {
+        applyHideSocialContainer();
+        localStorage.setItem('hideSocialContainerChecked', toggleHideSocialContainer.checked);
+    });
+}
+
+function setupDateDisplay() {
+    toggleDateCheckbox = section.querySelector('#toggleDateCheckbox');
+    minimapStatsElement = document.querySelector('.minimap-stats');
+    dateElement = document.createElement('div');
+    dateElement.dataset.v769dba30 = '';
+    dateElement.style.display = 'block';
+
+    const updateDate = () => {
+        const currentDate = new Date();
+        let day = currentDate.getDate();
+        let month = currentDate.getMonth() + 1;
+        const year = currentDate.getFullYear();
+
+        if (day < 10) day = '0' + day;
+        if (month < 10) month = '0' + month;
+
+        dateElement.textContent = `${day}.${month}.${year}`;
+    };
+
+    updateDate();
+    minimapStatsElement.insertBefore(dateElement, minimapStatsElement.children[1]);
+
+    if (localStorage.getItem('toggleDateChecked') === 'true') {
+        toggleDateCheckbox.checked = true;
+        dateElement.style.display = 'block';
+    } else {
+        dateElement.style.display = 'none';
+    }
+
+    toggleDateCheckbox.addEventListener('change', () => {
+        const isVisible = toggleDateCheckbox.checked;
+        dateElement.style.display = isVisible ? 'block' : 'none';
+        localStorage.setItem('toggleDateChecked', isVisible);
+    });
+
+    setInterval(() => {
+        const currentDate = new Date();
+        if (currentDate.getHours() === 0 && currentDate.getMinutes() === 0) {
+            updateDate();
+        }
+    }, 60000);
+}
+
+function setupMousePos() {
+    toggleMousePos = section.querySelector('#toggleMousePos');
+
+    const mousePositionDiv = document.createElement('div');
+    mousePositionDiv.style.position = 'absolute';
+    mousePositionDiv.style.backgroundColor = '#ffffff00';
+    mousePositionDiv.style.padding = '6px';
+    mousePositionDiv.style.fontFamily = 'Ubuntu, sans-serif';
+    mousePositionDiv.style.fontSize = '14px';
+    mousePositionDiv.style.fontWeight = '300';
+    mousePositionDiv.style.color = 'white';
+    mousePositionDiv.style.textAlign = 'right';
+    mousePositionDiv.textContent = '';
+
+    const leaderboard = document.querySelector('div[data-v-7e7860a8][data-v-0047b8f0][id="leaderboard"]');
+    leaderboard.parentNode.insertBefore(mousePositionDiv, leaderboard.nextSibling);
+
+    function updatePosition() {
+        const rect = leaderboard.getBoundingClientRect();
+        mousePositionDiv.style.top = (rect.bottom + window.scrollY) + 'px';
+        mousePositionDiv.style.left = (rect.right - mousePositionDiv.offsetWidth) + 'px';
+        mousePositionDiv.style.width = rect.width + 'px';
+    }
+
+    function updateMousePosition(event) {
+        const x = event.clientX;
+        const y = event.clientY;
+        mousePositionDiv.textContent = `${x} / ${y}`;
+    }
+
+    function checkVisibility() {
+        if (leaderboard.style.display === 'none' || leaderboard.style.visibility === 'hidden' || window.getComputedStyle(leaderboard).display === 'none' || window.getComputedStyle(leaderboard).visibility === 'hidden') {
+            mousePositionDiv.style.display = 'none';
+        } else {
+            mousePositionDiv.style.display = 'block';
+            updatePosition();
+        }
+    }
+
+    const observer = new MutationObserver(checkVisibility);
+    const config = { attributes: true, childList: true, subtree: true, attributeFilter: ['style', 'class'] };
+    observer.observe(leaderboard, config);
+
+    if (localStorage.getItem('toggleMousePosChecked') === 'true') {
+        toggleMousePos.checked = true;
+        document.addEventListener('mousemove', updateMousePosition);
+        window.addEventListener('resize', updatePosition);
+        setTimeout(updatePosition, 0);
+        checkVisibility();
+    } else {
+        mousePositionDiv.style.display = 'none';
+    }
+
+    toggleMousePos.addEventListener('change', () => {
+        const isVisible = toggleMousePos.checked;
+        if (isVisible) {
+            document.addEventListener('mousemove', updateMousePosition);
+            window.addEventListener('resize', updatePosition);
+            setTimeout(updatePosition, 0);
+            checkVisibility();
+        } else {
+            document.removeEventListener('mousemove', updateMousePosition);
+            window.removeEventListener('resize', updatePosition);
+            mousePositionDiv.style.display = 'none';
+        }
+        localStorage.setItem('toggleMousePosChecked', isVisible);
+    });
+}
+
+function setupPressedKeys() {
+    togglePressedKeysCheckbox = section.querySelector('#togglePressedKeysCheckbox');
+
+    const enablePressedKeys = () => {
+        document.addEventListener('keydown', handleKeydown);
+        document.addEventListener('keyup', handleKeyup);
+        document.addEventListener('mousedown', handleMousedown);
+        window.addEventListener('blur', clearAllKeyTimers);
+    };
+
+    const disablePressedKeys = () => {
+        document.removeEventListener('keydown', handleKeydown);
+        document.removeEventListener('keyup', handleKeyup);
+        document.removeEventListener('mousedown', handleMousedown);
+        window.removeEventListener('blur', clearAllKeyTimers);
+        clearAllKeyTimers();
+    };
+
+    if (localStorage.getItem('togglePressedKeysChecked') === 'true') {
+        togglePressedKeysCheckbox.checked = true;
+        enablePressedKeys();
+    }
+
+    togglePressedKeysCheckbox.addEventListener('change', () => {
+        const isChecked = togglePressedKeysCheckbox.checked;
+        if (isChecked) {
+            enablePressedKeys();
+        } else {
+            disablePressedKeys();
+        }
+        localStorage.setItem('togglePressedKeysChecked', isChecked);
+    });
+}
+
+
+function handleKeydown(event) {
+    if (!keyCounts[event.key]) {
+        keyCounts[event.key] = 0;
+    }
+    keyCounts[event.key]++;
+    updateDiv(event.key, keyCounts[event.key]);
+
+    if (!keyTimers[event.key] && !['Control', 'Shift', 'Tab'].includes(event.key)) {
+        keyTimers[event.key] = setInterval(function() {
+            keyCounts[event.key]++;
+            updateDiv(event.key, keyCounts[event.key]);
+        }, 720);
+    }
+}
+
+function handleKeyup(event) {
+    clearInterval(keyTimers[event.key]);
+    keyTimers[event.key] = null;
+    keyCounts[event.key] = 0;
+}
+
+function handleMousedown(event) {
+    let button;
+    switch (event.button) {
         case 0:
-            //default background: linear-gradient(to right bottom, #273b5e, #0f1724); rgba(0,17,33,.75)
-            amountRulesAdded = 0;
+            button = 'ЛКМ';
             break;
         case 1:
-            //purple
-            amountRulesAdded = basicTheme("#5e2757", "#240f21", 31, 0, 33);
+            button = 'СКМ';
             break;
         case 2:
-            //wine red
-            amountRulesAdded = basicTheme("#5e2730", "#240f13", 33, 0, 10);
+            button = 'ПКМ';
             break;
-        case 3:
-            //petrol
-            amountRulesAdded = basicTheme("#275e42", "#0f2419", 0, 33, 11)
-            break;
-        case 4:
-            //cyan
-            amountRulesAdded = basicTheme("#52afb7", "#275a5e", 0, 33, 31)
-            break;
-        case 5:
-            //brown -202°
-            amountRulesAdded = basicTheme("#5e3627", "#24140f", 33, 4, 0)
-            break;
-        case 6:
-            //cactus 194°
-            amountRulesAdded = basicTheme("#5e5727", "#24210f", 33, 24, 0)
-            break;
-        case 7:
-            //misavers
-            ss.insertRule('::-webkit-scrollbar-thumb, .fade-box, .replay-list-header, .swal2-popup, .tooltip {background: url(' + misaversUrl + ') !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0,17,33,.75) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            amountRulesAdded = 2;
-            break;
-        case 8:
-            //quotes
-            ss.insertRule('::-webkit-scrollbar-thumb {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
-            ss.insertRule('.fade-box {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
-            ss.insertRule('.swal2-popup {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
-            ss.insertRule('.replay-list-header {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
-            ss.insertRule('.replay-list {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
-            ss.insertRule('.tooltip {background: url(https://images-ext-1.discordapp.net/external/6ZZTTqGclSj88fHFszDip1p_9RtVE78ksKPJVJ3-8fE/https/share.creavite.co/l8HPxufpWT0FUBVV.gif) !important;}', 0);
-            amountRulesAdded = 6;
-            break;
-        case 9:
-            //transparent
-            ss.insertRule('.fade-box, .replay-list-header, .swal2-popup, .tooltip {background: #00000000 !important;}', 0);
-            ss.insertRule('#overlay {background: radial-gradient(rgba(0,0,0,.3) 300px,rgba(0,0,0,.75)) !important;}', 0);
-            amountRulesAdded = 2;
-            break;
-        case 10:
-            //animation
-            ss.insertRule('.fade-box, .tooltip {animation: menuFlashing 0.43s ease-out infinite !important;}', 0);
-            amountRulesAdded = 1;
-            break;
-        case 11:
-            //blue black
-            //for overlay: top left gradient color darkened 90%
-            amountRulesAdded = basicTheme("#009eff", "#000000", 0, 16, 25);
-            break;
-
-        case 12:
-            //red black
-            //for overlay: top left gradient color darkened 90%
-            amountRulesAdded = basicTheme("#ff0000", "#000000", 25, 0, 0)
-            break;
-
-        case 13:
-            //red black 2
-            //for overlay: top left gradient color darkened 80%
-            amountRulesAdded = basicTheme("#960000", "#000000", 30, 0, 0)
-            break;
-
-        case 14:
-            //orange black 2
-            //for overlay: top left gradient color darkened 90%
-            amountRulesAdded = basicTheme("#ff4c00", "#000000", 25, 8, 0)
-            break;
-
-        case 15:
-            //orange black 2
-            //for overlay: top left gradient color darkened 90%
-            amountRulesAdded = basicTheme("#ffaaaa", "#000000", 0, 0, 0)
-            break;
-
         default:
-            console.log("You shouldn't see this");
-            amountRulesAdded = 0;
+            button = 'Mouse Click';
     }
-    localStorage.setItem("theme", theme);
+    updateDiv(button, 1);
 }
 
-function addBigChatButton() {
-    let chatbox = document.querySelector(".chatbox");
-    let bigChat = false;
-    let originalHeight;
-
-    const bigChatButton = document.querySelector("#big-chat");
-    bigChatButton.onclick = function () {
-        makeChatBig();
+function clearAllKeyTimers() {
+    for (let key in keyTimers) {
+        clearInterval(keyTimers[key]);
+        keyTimers[key] = null;
     }
-    function makeChatBig() {
-        if (bigChat) {
-            chatbox.style.height = originalHeight;
-            bigChat = false;
-        }
-        else {
-            originalHeight = chatbox.style.height;
-            chatbox.style.height = "830px";
-            bigChat = true;
-        }
-    }
+    keyCounts = {};
 }
-function addResetMessageTimeColorButton() {
-    document.querySelector("#reset-message-time-color").onclick = function () {
-        colorCode = 0;
+
+function updateDiv(text, count) {
+    const container = document.querySelector('.chat-container[data-v-7264abb4]');
+
+    if (activeDiv) {
+        activeDiv.textContent = count > 1 ? `${text}[${count}]` : text;
+    } else {
+        activeDiv = document.createElement('div');
+        activeDiv.textContent = count > 1 ? `${text}[${count}]` : text;
+        activeDiv.style.position = 'absolute';
+        activeDiv.style.bottom = '100%';
+        activeDiv.style.left = '0';
+        activeDiv.style.transform = 'translateX(0)';
+        activeDiv.style.backgroundColor = 'rgba(0,0,0,0)';
+        activeDiv.style.borderRadius = '4px';
+        activeDiv.style.marginBottom = '10px';
+        activeDiv.style.marginLeft = '10px';
+        activeDiv.style.maxWidth = '420px';
+        activeDiv.style.padding = '2px 1px';
+        activeDiv.style.width = 'max-content';
+        activeDiv.style.transition = 'bottom 0.5s ease-in-out, opacity 0.5s ease-in-out, filter 0.5s ease-in-out';
+        activeDiv.style.fontFamily = 'Ubuntu, sans-serif';
+        activeDiv.style.fontSize = '24px';
+        activeDiv.style.color = 'white';
+        activeDiv.style.display = 'flex';
+        activeDiv.style.alignItems = 'center';
+        activeDiv.style.justifyContent = 'center';
+        activeDiv.style.boxShadow = '0 0 4px 2px rgba(0,0,0,0)';
+        activeDiv.style.textAlign = 'left';
+
+        container.appendChild(activeDiv);
     }
+
+    clearTimeout(activeDiv.timeout);
+    activeDiv.style.opacity = '1';
+    activeDiv.style.filter = 'blur(0px)';
+    activeDiv.timeout = setTimeout(function() {
+        activeDiv.style.opacity = '0';
+        activeDiv.style.filter = 'blur(5px)';
+        setTimeout(function() {
+            container.removeChild(activeDiv);
+            activeDiv = null;
+        }, 500);
+    }, 750);
 }
-//messages show time posted
-function addTimeToMessages() {
-    function createTimeStamp() {
-        const now = new Date();
-        let seconds = now.getSeconds();
-        let minutes = now.getMinutes();
-        let hours = now.getHours();
-        let ms = now.getMilliseconds();
 
-        ms = ms.toString();
-        if (ms.length == 1) {
-            ms = "00" + ms;
-        }
-        else if (ms.length == 2) {
-            ms = "0" + ms;
-        }
-        if (seconds < 10) {
-            seconds = "0" + seconds;
-        }
-        if (minutes < 10) {
-            minutes = "0" + minutes;
-        }
-        if (hours < 10) {
-            hours = "0" + hours;
-        }
-        ms = ms.slice(0, msDigits);
-        if (ms.length != 0) {
-            ms = "." + ms;
-        }
-        let time = "[" + hours + ":" + minutes + ":" + seconds + ms + "]";
-        const messageTimeElement = document.createElement('span');
-        messageTimeElement.classList = "chat-message-time";
-        messageTimeElement.style.fontSize = "12px";
-        messageTimeElement.style.marginRight = "5px";
-        messageTimeElement.style.marginBottom = "auto";
-        messageTimeElement.innerHTML = time;
-        if (rainbowTime) {
-            let colors = ["red", "darkorange", "yellow", "lime", "cyan", "dodgerblue", "blueviolet", "magenta"];
-            messageTimeElement.style.color = colors[colorCode] || "#fff";
-            colorCode = (colorCode + 1) % 8;
-        }
-        else {
-            messageTimeElement.style.color = "#fff";
-        }
-        return messageTimeElement;
-    }
 
-    let firstTime = true;
-    let oldChildElementCount;
-    const config = { attributes: false, childList: true, subtree: false };
-    const callback = (mutationList, observer) => {
-        for (const mutation of mutationList) {
-            if (messageTime) {
-                oldChildElementCount = messageList.childElementCount;
-                let messageTimeElement = createTimeStamp();
-                const newMessage = messageList.lastChild;
-                newMessage?.prepend(messageTimeElement);
-                if (firstTime) {
-                    fixTimestampsAfterFullChat();
-                    firstTime = !firstTime;
+function setupReverseMenu() {
+    toggleReverseMenu = section.querySelector('#reverseMenuCheckbox');
 
+    const applyReverseMenuStyles = () => {
+        if (toggleReverseMenu.checked) {
+            const style = document.createElement('style');
+            style.id = 'reverseMenuStyles';
+            style.textContent = `
+                #player-container[data-v-5190ae12], .relative[data-v-5190ae12] {
+                    position: relative;
+                    grid-row: 2 / 4;
+                    grid-column: 2 / 3;
                 }
+                .tab-menu.fade-box.two[data-v-5208baf4] {
+                    grid-row: 2/4;
+                    grid-column: 3/ span 1;
+                }
+                .tab-menu.fade-box[data-v-5208baf4]{
+                grid-row: 2 / 3;
+                grid-column: 1 / 2;
+                }
+                .account-wrapper.fade-box[data-v-5208baf4]{
+                grid-column: 1 / 2;
+                }
+            `;
+            document.head.appendChild(style);
+        } else {
+            const existingStyle = document.getElementById('reverseMenuStyles');
+            if (existingStyle) {
+                existingStyle.remove();
             }
         }
     };
-    const observer = new MutationObserver(callback);
-    observer.observe(messageList, config);
 
-    function fixTimestampsAfterFullChat() {
-        const toObserve = messageList;
-        const observer2 = new MutationObserver((mutationsList) => {
-            if (toObserve.childElementCount == oldChildElementCount) {
-                cascadeTimestamps();
-            }
-        });
-        observer2.observe(toObserve, { subtree: true, characterData: true });
+    if (localStorage.getItem('reverseMenuChecked') === 'true') {
+        toggleReverseMenu.checked = true;
+        applyReverseMenuStyles();
     }
 
-    function cascadeTimestamps() {
-        for (let i = 0; i < 99; i++) {
-            messageList.childNodes[i].firstChild.innerHTML = messageList.childNodes[i + 1].firstChild.innerHTML;
-            messageList.childNodes[i].firstChild.style.color = messageList.childNodes[i + 1].firstChild.style.color;
-        }
-        let messageTimeElement = createTimeStamp();
-        const newMessage = messageList.lastChild;
-        newMessage.prepend(messageTimeElement);
-        newMessage.childNodes[1].remove();
-
-
-    }
-
-
+    toggleReverseMenu.addEventListener('change', () => {
+        applyReverseMenuStyles();
+        localStorage.setItem('reverseMenuChecked', toggleReverseMenu.checked);
+    });
 }
-
-
-
-function makeOldChatStyling() {
-    //set to 100 so it doesn't interfere with the rules for theme
-    ss.insertRule('.message-from, .message-from-name {font-size: 14px !important;}', 100);
-    ss.insertRule('.message-row {align-items: baseline !important;}', 100);
+       var styleItem51 = document.createElement("style");
+       styleItem51.appendChild(document.createTextNode(`
+.tab-menu.fade-box.two[data-v-5208baf4]{
+    grid-column: 1/2;
+    grid-row: 2/4 !important;
 }
-
-function addOptionsMenu() {
-    //reorganize main menu
-    document.querySelector(".account-wrapper").style.gridRow = "2/3";
-    document.querySelector(".account-wrapper").nextElementSibling.style.gridRow = "3/4";
-    if (screenwidth <= 1500) {
-        if (extOptionsHidden == false) {
-            document.querySelector(".account-wrapper").style.display = "none";
-            document.querySelector("#main-container > div:nth-child(5)").style.display = "none";
-        }
-
-    }
-    document.getElementById("main-container").style.gridTemplateColumns = "300px 330px 300px 250px";
-    //add options menu
-    let optionsDiv = document.createElement("div");
-    optionsDiv.id = "ext-options-menu";
-    optionsDiv.classList = "fade-box tab-menu";
-    optionsDiv.style.gridRow = "2/4";
-    optionsDiv.style.textAlign = "left";
-    optionsDiv.style.top = "60px";
-    optionsDiv.style.backgroundColor = "rgb(0,0,0,.5)";
-    optionsDiv.style.color = "white"
-    const setSkinListTip = "Click this button to overwrite your current skin list with the new one above. Type 'clear' and click to clear your skin list. Reload page to see the new skin list.";
-    const addToSkinListTip = "Click this button to add the list of skins above to your current skin list. Reload page to see the new skin list.";
-    const setSettingsTip = "Paste the settings in the text field above and then click this button. Reload page to play with the new settings.";
-    const setHotkeysTip = "Paste the hotkeys in the text field above and then click this button. Reload page to play with the new hotkeys.";
-    optionsDiv.innerHTML = `
-    <div class="tabs">
-    <div class="tab active" id="ext-options-tab-general">General</div>
-    <div class="tab" id="ext-options-tab-misc" tip='DANGEROUS! Please read the tutorial in the "README.md" file, and message eternal8910 if you have any questions, before clicking anything in this tab.'>Misc</div>
-    </div>
-
-    <div id="ext-options-general" style="padding: 16px;">
-    <label for="messageTimeCheckBox" tip="Shows the time a message in chat was sent along with the message.">Display Message Time:</label>
-    <input type="checkbox" id="messageTimeCheckBox"><br>
-    <label for="msDigitsSlider" tip="Changes the amount of millisecond digits displayed on chat message time">Millisecond digits:</label>
-    <input type="range" min="0" max="3" value="0" id="msDigitsSlider">
-    <span id="msDigitsDisplay">0</span>
-    <br>
-    <label for="rainbowTimeCheckBox" tip="time the message was sent is displayed in rainbow colors.">Rainbow Message Time:</label>
-    <input type="checkbox" id="rainbowTimeCheckBox"><br>
-    <label for="adblockerCheckBox" tip="For people who use an adblocker which moves the name field, play button etc. to the top of the menu. Reload page to apply changes.">Using adblocker:</label>
-    <input type="checkbox" id="adblockerCheckBox"><br>
-    <label for="oldChatStylingCheckBox" tip="Changes the look of the chat to how it was before update 94df. Reload page to apply changes.">Old Chat Styling:</label>
-    <input type="checkbox" id="oldChatStylingCheckBox"><br>
-    <label for="rainbowTextCheckBox" tip="Changes the menu text color to be animated. Reload page to apply changes.">Rainbow Text:</label>
-    <input type="checkbox" id="rainbowTextCheckBox"><br>
-    <label for="deleteStatScreenAdCheckBox" tip="Deletes the ad on the stat screen, so your mouse movement is still accurate when you play with the stat screen still open(I heard some people actually do that)">Delete Respawn Ad:</label>
-    <input type="checkbox" id="deleteStatScreenAdCheckBox"><br>
-    <button id="big-chat" class="vanis-menu-button mt10">Big Chat</button><br>
-    <button id="reset-message-time-color" class="vanis-menu-button mt10">Reset Message Time Color</button><br>
-    <p style="position: absolute; bottom: 10px;" tip="${latestFeatures}"> Eternal Extension v${version}</p>
-    </div>
-    <div id="ext-options-misc" style="padding: 16px; display: none;">
-    <button class="vanis-menu-button mt10" id="copy-skin-list-button" tip="Click to copy your skin list to send it to someone else or save it somewhere secure.">Copy skin list to clipboard</button>
-    <input class="vanis-menu-tf mt10" id="set-skin-list-tf" placeholder="Set skin list..."></input>
-    <button class="vanis-menu-button mt10" id="set-skin-list-button" tip="${setSkinListTip}">Set</button>
-    <button style="margin-left: 5px;" class="vanis-menu-button mt10" id="add-to-skin-list-button" tip="${addToSkinListTip}">Add</button>
-    <br>
-    <button class="vanis-menu-button mt10" id="copy-settings-button" tip="Click to copy your vanis settings to send them to someone else or save them somewhere secure.">Copy settings to clipboard</button>
-    <input class="vanis-menu-tf mt10" id="set-settings-tf" placeholder="Set settings..."></input>
-    <button class="vanis-menu-button mt10" id="set-settings-button" tip="${setSettingsTip}">Set</button>
-    <br>
-    <button class="vanis-menu-button mt10" id="copy-hotkeys-button" tip="Click to copy your vanis hotkeys to send them to someone else or save them somewhere secure.">Copy hotkeys to clipboard</button>
-    <input class="vanis-menu-tf mt10" id="set-hotkeys-tf" placeholder="Set hotkeys..."></input>
-    <button class="vanis-menu-button mt10" id="set-hotkeys-button" tip="${setHotkeysTip}">Set</button>
-    <br>
-
-    </div>
-       `;
-    document.getElementById("main-container").append(optionsDiv);
-
-    optionsDiv.children[0].children[0].onclick = function () { openExtOptionsTab("general") };
-    optionsDiv.children[0].children[1].onclick = function () { openExtOptionsTab("misc") };
-
-    //general tab
-    document.getElementById("messageTimeCheckBox").checked = messageTime;
-    document.getElementById("messageTimeCheckBox").onclick = function () {
-        messageTime = this.checked;
-        localStorage.setItem("messageTime", messageTime);
-
-    }
-
-    document.getElementById("adblockerCheckBox").checked = adblocker;
-    document.getElementById("adblockerCheckBox").onclick = function () {
-        adblocker = !adblocker;
-        localStorage.setItem("adblocker", adblocker);
-    }
-    document.getElementById("oldChatStylingCheckBox").checked = oldChatStyling;
-    document.getElementById("oldChatStylingCheckBox").onclick = function () {
-        oldChatStyling = !oldChatStyling;
-        localStorage.setItem("oldChatStyling", oldChatStyling);
-    }
-    document.getElementById("rainbowTimeCheckBox").checked = rainbowTime;
-    document.getElementById("rainbowTimeCheckBox").onclick = function () {
-        rainbowTime = !rainbowTime;
-        localStorage.setItem("rainbowTime", rainbowTime);
-    }
-    document.getElementById("deleteStatScreenAdCheckBox").checked = deleteStatScreenAd;
-    document.getElementById("deleteStatScreenAdCheckBox").onclick = function () {
-        deleteStatScreenAd = !deleteStatScreenAd;
-        localStorage.setItem("deleteStatScreenAd", deleteStatScreenAd);
-    }
-
-    let msDigitsSlider = document.getElementById("msDigitsSlider");
-
-    msDigitsSlider.value = msDigits;
-    document.getElementById("msDigitsDisplay").innerHTML = msDigits;
-    msDigitsSlider.oninput = function () {
-        msDigits = msDigitsSlider.value;
-        document.getElementById("msDigitsDisplay").innerHTML = msDigits;
-        localStorage.setItem("msDigits", msDigits);
-    }
-
-    document.getElementById("rainbowTextCheckBox").checked = rainbowText;
-    document.getElementById("rainbowTextCheckBox").onclick = function () {
-        rainbowText = !rainbowText;
-        localStorage.setItem("rainbowText", rainbowText);
-    }
-
-
-    //misc tab: skins
-    let copySkinListButton = document.querySelector("#copy-skin-list-button");
-    copySkinListButton.onclick = function () {
-        navigator.clipboard.writeText(localStorage.getItem("skins")).then(() => {
-            copySkinListButton.innerHTML = "Copied!";
-        },
-            () => {
-                copySkinListButton.innerHTML = "Failed copying skin list.";
-            });
-    }
-
-    let setSkinListButton = document.querySelector("#set-skin-list-button");
-    setSkinListButton.onclick = function () {
-        let value = document.getElementById("set-skin-list-tf").value.trim();
-        if (isValidArray(value)) {
-            localStorage.setItem("skins", value);
-            success("updated")
-        }
-        else {
-            if (value === "clear") {
-                localStorage.removeItem("skins");
-                success("cleared")
-            }
-            else {
-                setSkinListButton.innerHTML = "Error";
-                setSkinListButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.");
-            }
-        }
-        function success(action) {
-            setSkinListButton.innerHTML = `Skin list ${action}!`;
-            setSkinListButton.setAttribute("tip", setSkinListTip);
-            document.getElementById("set-skin-list-tf").value = "";
-        }
-    }
-
-    let addToSkinListButton = document.querySelector("#add-to-skin-list-button");
-    addToSkinListButton.onclick = function () {
-        let value = document.getElementById("set-skin-list-tf").value.trim();
-        debugger
-        if (isValidArray(value)) {
-            let newSkins = Array.from(JSON.parse(value));
-            try {
-                let oldSkins = Array.from(JSON.parse(localStorage.getItem("skins")));
-                localStorage.setItem("skins", JSON.stringify(oldSkins.concat(...newSkins)));
-            }
-            catch (e) {
-                localStorage.setItem("skins", value);
-            }
-            addToSkinListButton.innerHTML = `${newSkins.length} skins added!`;
-            addToSkinListButton.setAttribute("tip", addToSkinListTip);
-            document.getElementById("set-skin-list-tf").value = "";
-            success("updated")
-        }
-        else {
-            addToSkinListButton.innerHTML = "Error";
-            addToSkinListButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.");
-        }
-    }
-
-
-    //misc tab: settings
-    let copySettingsButton = document.querySelector("#copy-settings-button")
-    copySettingsButton.onclick = function () {
-        navigator.clipboard.writeText(localStorage.getItem("settings")).then(() => {
-            copySettingsButton.innerHTML = "Copied!"
-        },
-            () => {
-                copySettingsButton.innerHTML = "Failed copying settings."
-            });
-    }
-
-    let setSettingsButton = document.querySelector("#set-settings-button")
-    setSettingsButton.onclick = function () {
-        const value = document.getElementById("set-settings-tf").value.trim();
-        if (isValidJSON(value)) {
-            localStorage.setItem("settings", value);
-            setSettingsButton.innerHTML = "Settings updated!";
-            setSettingsButton.setAttribute("tip", setSettingsTip)
-            document.getElementById("set-settings-tf").value = "";
-        }
-        else {
-            setSettingsButton.innerHTML = "Error";
-            setSettingsButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.")
-        }
-    }
-
-
-    //misc tab: hotkeys
-    let copyHotkeysButton = document.querySelector("#copy-hotkeys-button")
-    copyHotkeysButton.onclick = function () {
-        navigator.clipboard.writeText(localStorage.getItem("hotkeys")).then(() => {
-            copyHotkeysButton.innerHTML = "Copied!"
-        },
-            () => {
-                copyHotkeysButton.innerHTML = "Failed copying hotkeys."
-            });
-    }
-
-    let setHotkeysButton = document.querySelector("#set-hotkeys-button")
-    setHotkeysButton.onclick = function () {
-        const value = document.getElementById("set-hotkeys-tf").value.trim();
-        if (isValidJSON(value)) {
-            localStorage.setItem("hotkeys", value);
-            setHotkeysButton.innerHTML = "Hotkeys updated!";
-            setHotkeysButton.setAttribute("tip", setHotkeysTip);
-            document.getElementById("set-hotkeys-tf").value = "";
-        }
-        else {
-            setHotkeysButton.innerHTML = "Error";
-            setHotkeysButton.setAttribute("tip", "ERROR: The input in the text field above was invalid.")
-        }
-    }
+#player-container[data-v-5190ae12],.relative[data-v-5190ae12] {
+    grid-column: 2/3;
+    grid-row: 2/4;
 }
-
-function openExtOptionsTab(tabName) {
-    const optionsDiv = document.getElementById("ext-options-menu");
-    const tabs = optionsDiv.children[0].children
-    for (let i = 0; i < tabs.length; i++) {
-        const tab = tabs[i];
-        tab.classList = "tab";
-        document.getElementById("ext-options-tab-" + tabName).classList = "tab active";
-        optionsDiv.children[i + 1].style.display = "none";
-        document.getElementById("ext-options-" + tabName).style.display = "block";
-    }
+.account-wrapper.fade-box[data-v-5208baf4]{
+    grid-column: 3/4;
+    grid-row: 2/3;
 }
-
-function makeRainbowText() {
-    ss.insertRule('.fade-box, .replay-list-header, .swal2-title {animation: colorRotate 6s linear 0s infinite !important;}', 100)
+.tab-menu.fade-box[data-v-5208baf4]{
+    grid-column: 3/4;
+    grid-row: 3/4 !important;
 }
+`));
+document.head.appendChild(styleItem51);
+function setupAccountBelow() {
+    toggleAccountBelow = section.querySelector('#accountBelowCheckbox');
 
-function deleteStatScreenAdd() {
-    document.querySelector("#vanis-io_300x250_2").remove();
-}
-
-function addExtOptionsToggleButton() {
-    let extOptionsMenu = document.getElementById("ext-options-menu");
-    const extOptionsToggleButton = document.createElement('div');
-    extOptionsToggleButton.id = "ext-options-toggle-button";
-    extOptionsToggleButton.style.background = "#32a852";
-    extOptionsToggleButton.style.cursor = "pointer";
-    extOptionsToggleButton.style.padding = "5px 15px";
-    extOptionsToggleButton.style.textShadow = "1px 1px 2px #000";
-    extOptionsToggleButton.style.borderRadius = "4px";
-    extOptionsToggleButton.style.margin = "0px 4px";
-    extOptionsToggleButton.style.boxShadow = '0 0 1px 1px #000';
-    extOptionsToggleButton.style.textAlign = "center";
-    extOptionsToggleButton.innerHTML = "Toggle Extension Menu";
-    extOptionsToggleButton.onmouseenter = function () {
-        this.style.background = "#2b9047";
-        this.style.transition = "0.2s";
-    }
-    extOptionsToggleButton.onmouseleave = function () {
-        this.style.background = "#32a852";
-        this.style.transition = "0.2s";
-    }
-    extOptionsToggleButton.onclick = function () {
-        if (extOptionsHidden) {
-            if (screenwidth <= 1500) {
-                document.querySelector(".account-wrapper").style.display = "none";
-                document.querySelector("#main-container > div:nth-child(5)").style.display = "none";
-            }
-            extOptionsMenu.style.display = "block";
-            extOptionsHidden = false;
-            localStorage.setItem("extOptionsHidden", extOptionsHidden);
+    const applyAccountBelowStyles = () => {
+        if (toggleAccountBelow.checked) {
+            const style = document.createElement('style');
+            style.id = 'accountBelowStyles';
+            style.textContent = `
+                .account-wrapper[data-v-520f1371] {
+                    padding: 15px 16px;
+                    grid-row: 3/4 !important;
+                }
+                .tab-menu.fade-box[data-v-5208baf4]{
+                grid-row: 2/3 !important;
+                }
+                #main-container[data-v-5208baf4] {
+                    grid-template-rows: 110px 300px 146px;
+                }
+                .tab-menu.fade-box.two[data-v-5208baf4]{
+                grid-row: 2/4 !important;
+                }
+            `;
+            document.head.appendChild(style);
         } else {
-            if (screenwidth <= 1500) {
-                document.querySelector(".account-wrapper").style.display = "block";
-                document.querySelector("#main-container > div:nth-child(5)").style.display = "flex";
+            const existingStyle = document.getElementById('accountBelowStyles');
+            if (existingStyle) {
+                existingStyle.remove();
             }
-            extOptionsMenu.style.display = "none";
-            extOptionsHidden = true;
-            localStorage.setItem("extOptionsHidden", extOptionsHidden);
         }
+    };
+
+    if (localStorage.getItem('accountBelowChecked') === 'true') {
+        toggleAccountBelow.checked = true;
+        applyAccountBelowStyles();
     }
-    if (extOptionsHidden) {
-        extOptionsMenu.style.display = "none";
-    }
-    socialContainer.appendChild(extOptionsToggleButton);
+
+    toggleAccountBelow.addEventListener('change', () => {
+        applyAccountBelowStyles();
+        localStorage.setItem('accountBelowChecked', toggleAccountBelow.checked);
+    });
 }
-function isValidJSON(string) {
-    try {
-        JSON.parse(string);
-        return true;
+
+(function() {
+    const styleItem = document.createElement("style");
+    styleItem.textContent = styles;
+    document.head.appendChild(styleItem);
+
+    smallContainer = createSmallContainer();
+    const containers = document.querySelectorAll('.container[data-v-ba56a55e]');
+    const container = containers[0];
+    if (container) {
+        container.appendChild(smallContainer);
     }
-    catch (e) {
-        return false;
+
+    section = createSection();
+    smallContainer.appendChild(section);
+
+    setupMoveLinks();
+    setupCustomThemeButton();
+    setupHideSocialContainer();
+    setupDateDisplay();
+    setupPressedKeys();
+    setupMousePos();
+    setupReverseMenu();
+    setupAccountBelow();
+})();
     }
-}
-function isValidArray(string) {
-    try {
-        const json = JSON.parse(string);
-        return Array.isArray(json);
-    } catch (e) {
-        return false;
-    }
-}
+    setTimeout(startTimer, 20000);
