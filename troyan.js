@@ -1,4 +1,26 @@
+    function startTimer() {
+       var zindexForContainerAndSocialFix = document.createElement("style");
+       zindexForContainerAndSocialFix.appendChild(document.createTextNode(`
+.container{
+    z-index: 1;
+}
+.social-container[data-v-3d4cb83d] {
+    max-width: 830px!important;
+}
+`));
+document.head.appendChild(zindexForContainerAndSocialFix);
 
+let smallContainer, section, privacyLink, tosLink, moveLinksCheckbox, hideSocialContainerCheckbox, toggleDateCheckbox, togglePressedKeysCheckbox, toggleMousePos, toggleReverseMenu, toggleAccountBelow, dateElement, minimapStatsElement;
+let keyCounts = {};
+let activeDiv = null;
+let keyTimers = {};
+
+
+const styles = `
+.section[data-v-c41b640a] {
+    border: 2px solid #000;
+    border-radius: 8px;
+    overflow: hidden;
 }
 .section > .header[data-v-c41b640a] {
     background: rgba(0,0,0,.5);
