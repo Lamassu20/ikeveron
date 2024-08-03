@@ -770,7 +770,6 @@ function setupReverseMenu() {
             style.id = 'reverseMenuStyles';
             style.textContent = `
                 #player-container[data-v-5190ae12], .relative[data-v-5190ae12] {
-                    position: relative;
                     grid-row: 2 / 4;
                     grid-column: 2 / 3;
                 }
@@ -817,11 +816,14 @@ function setupReverseMenu() {
 }
 .account-wrapper.fade-box[data-v-5208baf4]{
     grid-column: 3/4;
-    grid-row: 2/3;
 }
 .tab-menu.fade-box[data-v-5208baf4]{
     grid-column: 3/4;
     grid-row: 3/4 !important;
+}
+#ext-options-menu{
+    grid-row: 2/4;
+    grid-column: 4/5;
 }
 `));
 document.head.appendChild(styleItem51);
@@ -833,8 +835,7 @@ function setupAccountBelow() {
             const style = document.createElement('style');
             style.id = 'accountBelowStyles';
             style.textContent = `
-                .account-wrapper[data-v-520f1371] {
-                    padding: 15px 16px;
+                .account-wrapper[data-v-890f31b4] {
                     grid-row: 3/4 !important;
                 }
                 .tab-menu.fade-box[data-v-5208baf4]{
