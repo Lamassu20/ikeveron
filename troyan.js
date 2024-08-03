@@ -1,26 +1,4 @@
-    function startTimer() {
-       var zindexForContainerAndSocialFix = document.createElement("style");
-       zindexForContainerAndSocialFix.appendChild(document.createTextNode(`
-.container{
-    z-index: 1;
-}
-.social-container[data-v-3d4cb83d] {
-    max-width: 830px!important;
-}
-`));
-document.head.appendChild(zindexForContainerAndSocialFix);
 
-let smallContainer, section, privacyLink, tosLink, moveLinksCheckbox, hideSocialContainerCheckbox, toggleDateCheckbox, togglePressedKeysCheckbox, toggleMousePos, toggleReverseMenu, toggleAccountBelow, dateElement, minimapStatsElement;
-let keyCounts = {};
-let activeDiv = null;
-let keyTimers = {};
-
-
-const styles = `
-.section[data-v-c41b640a] {
-    border: 2px solid #000;
-    border-radius: 8px;
-    overflow: hidden;
 }
 .section > .header[data-v-c41b640a] {
     background: rgba(0,0,0,.5);
@@ -71,6 +49,16 @@ const styles = `
     text-shadow: 1px 1px 2px #000;
     margin-left: 0px;
     margin-top: 0px;
+}
+.zxc2 {
+  position: absolute;
+  background-color: #ffffff00;
+  padding-right: 7px;
+  padding-top: 5px;
+  font-family: Ubuntu, sans-serif;
+  font-size: 14px;
+  color: #dadada;
+  text-align: right;
 }
 .zxc1 {
     position: absolute;
@@ -126,6 +114,81 @@ const styles = `
 }
 `;
 
+function setupShowStatsColor() {
+    const toggleStatsColorCheckbox = section.querySelector('#showStatsColorCheckbox');
+
+    const applyStatsColor = () => {
+        if (toggleStatsColorCheckbox.checked) {
+            intervalId = setInterval(updateStatsColors, 1);
+        } else {
+            clearInterval(intervalId);
+            resetStatsColor();
+        }
+    };
+
+    if (localStorage.getItem('showStatsColorChecked') === 'true') {
+        toggleStatsColorCheckbox.checked = true;
+        applyStatsColor();
+    }
+
+    toggleStatsColorCheckbox.addEventListener('change', () => {
+        applyStatsColor();
+        localStorage.setItem('showStatsColorChecked', toggleStatsColorCheckbox.checked);
+    });
+}
+
+function resetStatsColor() {
+    var statsElement = document.querySelector('.stats');
+
+    if (statsElement) {
+        var fpsDiv = statsElement.querySelector('div:nth-child(1)');
+        var pingDiv = statsElement.querySelector('div:nth-child(2)');
+
+        if (fpsDiv) {
+            fpsDiv.style.color = 'white';
+        }
+
+        if (pingDiv) {
+            pingDiv.style.color = 'white';
+        }
+    }
+}
+
+
+function updateStatsColors() {
+    var statsElement = document.querySelector('.stats');
+
+    if (statsElement) {
+        var fpsDiv = statsElement.querySelector('div:nth-child(1)');
+        if (fpsDiv) {
+            var fpsValue = fpsDiv.textContent.trim().split(':')[1].trim();
+            var fpsInt = parseInt(fpsValue);
+            if (!isNaN(fpsInt)) {
+                if (fpsInt <= 40) {
+                    fpsDiv.style.color = "#ffaaaa"; // хуйня
+                } else if (fpsInt <= 120) {
+                    fpsDiv.style.color = "#aaffaa"; // норм
+                } else if (fpsInt <= 1000) {
+                    fpsDiv.style.color = "#aaffff"; // все пиздато
+                }
+            }
+        }
+        var pingDiv = statsElement.querySelector('div:nth-child(2)');
+        if (pingDiv) {
+            var pingValue = pingDiv.textContent.trim().split(':')[1].trim();
+            var pingInt = parseInt(pingValue);
+            if (!isNaN(pingInt)) {
+                if (pingInt <= 40) {
+                    pingDiv.style.color = "#aaffff"; // все пиздато
+                } else if (pingInt <= 120) {
+                    pingDiv.style.color = "#aaffaa"; // норм
+                } else if (pingInt <= 1000) {
+                    pingDiv.style.color = "#ffaaaa"; // хуйня
+                }
+            }
+        }
+    }
+}
 
 function createSmallContainer() {
     const container = document.createElement('div');
@@ -157,10 +220,11 @@ function createSection() {
             ${createCheckbox('customThemeCheckbox', 'Your Theme')}
             <button class="zxc3" id="settingsButton">Settings</button>
             </div>
-            </div>
-            <div class="settings-column-2">
                 ${createCheckbox('reverseMenuCheckbox', 'Reversed Menu')}
                 ${createCheckbox('accountBelowCheckbox', 'Account Below')}
+            </div>
+            <div class="settings-column-2">
+                ${createCheckbox('showStatsColorCheckbox', 'Show Stats Color')}
                 ${createCheckbox('toggleDateCheckbox', 'Show Current Date')}
                 ${createCheckbox('togglePressedKeysCheckbox', 'Show Pressed Keys')}
                 ${createCheckbox('toggleMousePos', 'Show Mouse Position')}
@@ -568,12 +632,12 @@ function setupMousePos() {
     toggleMousePos = section.querySelector('#toggleMousePos');
 
     const mousePositionDiv = document.createElement('div');
+    mousePositionDiv.classList.add('zxc2');
     mousePositionDiv.style.position = 'absolute';
     mousePositionDiv.style.backgroundColor = '#ffffff00';
     mousePositionDiv.style.padding = '6px';
     mousePositionDiv.style.fontFamily = 'Ubuntu, sans-serif';
     mousePositionDiv.style.fontSize = '14px';
-    mousePositionDiv.style.fontWeight = '300';
     mousePositionDiv.style.color = 'white';
     mousePositionDiv.style.textAlign = 'right';
     mousePositionDiv.textContent = '';
@@ -588,11 +652,12 @@ function setupMousePos() {
         mousePositionDiv.style.width = rect.width + 'px';
     }
 
-    function updateMousePosition(event) {
-        const x = event.clientX;
-        const y = event.clientY;
-        mousePositionDiv.textContent = `${x} / ${y}`;
-    }
+function updateMousePosition(event) {
+    if (!toggleMousePos.checked) return;
+    const x = event.clientX;
+    const y = event.clientY;
+    mousePositionDiv.textContent = `𓍢ִ໋${x} ${y}ˡ`;
+}
 
     function checkVisibility() {
         if (leaderboard.style.display === 'none' || leaderboard.style.visibility === 'hidden' || window.getComputedStyle(leaderboard).display === 'none' || window.getComputedStyle(leaderboard).visibility === 'hidden') {
@@ -617,20 +682,20 @@ function setupMousePos() {
         mousePositionDiv.style.display = 'none';
     }
 
-    toggleMousePos.addEventListener('change', () => {
-        const isVisible = toggleMousePos.checked;
-        if (isVisible) {
-            document.addEventListener('mousemove', updateMousePosition);
-            window.addEventListener('resize', updatePosition);
-            setTimeout(updatePosition, 0);
-            checkVisibility();
-        } else {
-            document.removeEventListener('mousemove', updateMousePosition);
-            window.removeEventListener('resize', updatePosition);
-            mousePositionDiv.style.display = 'none';
-        }
-        localStorage.setItem('toggleMousePosChecked', isVisible);
-    });
+toggleMousePos.addEventListener('change', () => {
+    const isVisible = toggleMousePos.checked;
+    if (isVisible) {
+        document.addEventListener('mousemove', updateMousePosition);
+        window.addEventListener('resize', updatePosition);
+        setTimeout(updatePosition, 0);
+        checkVisibility();
+    } else {
+        document.removeEventListener('mousemove', updateMousePosition);
+        window.removeEventListener('resize', updatePosition);
+        mousePositionDiv.style.display = 'none';
+    }
+    localStorage.setItem('toggleMousePosChecked', isVisible);
+});
 }
 
 function setupPressedKeys() {
@@ -890,6 +955,7 @@ function setupAccountBelow() {
     setupPressedKeys();
     setupMousePos();
     setupReverseMenu();
+    setupShowStatsColor();
     setupAccountBelow();
 })();
     }
