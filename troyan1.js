@@ -59,7 +59,7 @@ const styles = `
     margin-top: 5px;
 }
 .zxc3 {
-    background: #b1700f;
+    background: #ffaaaa;
     border: 0;
     border-radius: 4px;
     box-shadow: 0 0 1px 1px #000;
