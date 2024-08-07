@@ -343,13 +343,13 @@ input[type=number]:disabled,input[type=text]:disabled,select:disabled {    color
 .lobby-list[data-v-67f43bc8] {    border-right: 2px solid #fff0;    margin-right: 6px;    width: 300px}
 .lobby-chat[data-v-67f43bc8] {    border-left: 2px solid #fff0;    margin-left: 6px;    width: 300px}
 .lobby-list>.row[data-v-fa675f88] {    border-bottom: 2px solid #fff0;    cursor: pointer;    display: flex;    justify-content: space-between;    padding: 10px}
-.tab-menu .tab[data-v-fe96ed48]:not(:last-child) {    border-right: 2px solid #fff0}
-.tab-menu .tabs[data-v-fe96ed48] {    border-bottom: 2px solid #fff0;    display: flex;    font-size: 18px}
-.server-list-item[data-v-fe96ed48] {    border-bottom: 2px solid #fff0;    background: #ffffff00;    border: 0;    border-radius: 0px;   box-shadow: 0 0 4px 2px #0000;    color: #ffffffba;    text-shadow: 0 0 2px #fff0;    cursor: pointer;  display: flex;    padding: 10px;    user-select: none}
-.server-list-item[data-v-fe96ed48]:hover {    transition: .2s cubic-bezier(0.4, 0, 1, 1);    background: #ffffff00;    color: #ffffffc4;    text-shadow: 0 0 3px #ffffffc4;}
-.server-list-item.active[data-v-fe96ed48],.server-list-item.active[data-v-fe96ed48]:hover {    background: #ffffff00;    color: #fff;    text-shadow: 0px 0px 7px #fff;}
-#hotkey-container .row[data-v-6754dc1c]:not(:last-child) {    border-bottom: 2px solid #fff0}
-#hotkey-container .footer[data-v-6754dc1c] {    border-top: 2px solid #fff0;    color: white;    display: flex;    justify-content: center;    padding: 10px}
+.tab-menu .tab[data-v-752a3ab7]:not(:last-child) {    border-right: 2px solid #fff0}
+.tab-menu .tabs[data-v-752a3ab7] {    border-bottom: 2px solid #fff0;    display: flex;    font-size: 18px}
+.server-list-item[data-v-752a3ab7] {    border-bottom: 2px solid #fff0;    background: #ffffff00;    border: 0;    border-radius: 0px;   box-shadow: 0 0 4px 2px #0000;    color: #ffffffba;    text-shadow: 0 0 2px #fff0;    cursor: pointer;  display: flex;    padding: 10px;    user-select: none}
+.server-list-item[data-v-752a3ab7]:hover {    transition: .2s cubic-bezier(0.4, 0, 1, 1);    background: #ffffff00;    color: #ffffffc4;    text-shadow: 0 0 3px #ffffffc4;}
+.server-list-item.active[data-v-752a3ab7],.server-list-item.active[data-v-752a3ab7]:hover {    background: #ffffff00;    color: #fff;    text-shadow: 0px 0px 7px #fff;}
+#hotkey-container .row[data-v-14acee54]:not(:last-child) {    border-bottom: 2px solid #fff0}
+#hotkey-container .footer[data-v-14acee54] {    border-top: 2px solid #fff0;    color: white;    display: flex;    justify-content: center;    padding: 10px}
 .reset-option[data-v-c41b640a] {    color: white;    cursor: pointer;    display: inline-flex;    justify-content: center}
 .reset-option[data-v-4dcda2ec] {    color: white;    cursor: pointer;    display: inline-flex;    justify-content: center}
 .reset-option[data-v-4dcda2ec] {    color: white;    cursor: pointer;    display: inline-flex;    justify-content: center}
@@ -359,10 +359,10 @@ input[type=number]:disabled,input[type=text]:disabled,select:disabled {    color
 .tab-menu .tabs {    border-bottom: 2px solid #fff0;    display: flex;    font-size: 18px}
 ::-webkit-scrollbar-thumb {    background-color: #ffffff29;    border-radius: 10px;    box-shadow: 0 0 0px rgb(255 255 255 / 30%);}
 ::-webkit-scrollbar-track {    background: rgb(255 255 255 / 0%)}
-.tab-menu .tabs[data-v-fe96ed48] {color: #fff0;}
-.tab-menu .tabs[data-v-fe96ed48]:hover {    transition: all 0.4s cubic-bezier(0.4, 0, 1, 1);    background: #ffffff00;    color: #ffffff;            text-shadow: 0 0 8px #fff;}
-.tab-menu .tab.active[data-v-fe96ed48] {    background: rgb(255 255 255 / 0%)}
-.open-lobbies[data-v-fe96ed48] {    background: hsl(0deg 0% 100% / 0%)}
+.tab-menu .tabs[data-v-752a3ab7] {color: #fff0;}
+.tab-menu .tabs[data-v-752a3ab7]:hover {    transition: all 0.4s cubic-bezier(0.4, 0, 1, 1);    background: #ffffff00;    color: #ffffff;            text-shadow: 0 0 8px #fff;}
+.tab-menu .tab.active[data-v-752a3ab7] {    background: rgb(255 255 255 / 0%)}
+.open-lobbies[data-v-752a3ab7] {    background: hsl(0deg 0% 100% / 0%)}
 .tab-menu .tab[data-v-2eade0fe] {    cursor: pointer;    flex: 1;    padding: 7px;    position: relative;    text-align: center;    background: #ffffff00;    border: 0;    border-radius: 0px;    box-shadow: 0 0 4px 2px #fff0;    color: #ffffff00;    text-shadow: 0 0 2px #fff0;    border-right: 2px solid #ffffff00}
 .tab-menu .tab[data-v-2eade0fe]:hover{    transition: .4s cubic-bezier(0.4, 0, 1, 1);    background: #ffffff00;    color: #fff;    text-shadow: 0 0 12px #fff;}
 #skins[data-v-2eade0fe] {    grid-gap: 10px;    box-sizing: border-box;    display: grid;    grid-auto-rows: 1fr;    grid-template-columns: 1fr 1fr 1fr;    min-width: 100%;    padding: 10px}
@@ -707,6 +707,68 @@ function setupCustomThemeButton() {
 }
 
 
+// Настройка юзерскрипта
+(function() {
+    // Убедитесь, что скрипт запускается после загрузки DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        // Находим canvas элемент, который используется для рисования
+        var canvas = document.querySelector('canvas'); // Замените на ваш canvas селектор, если необходимо
+        if (!canvas) {
+            console.error('Canvas элемент не найден!');
+            return;
+        }
+
+        var ctx = canvas.getContext('2d');
+
+        // Предположим, что `p` - это массив объектов с координатами и радиусами
+        // Если `p` действительно не определен, создаем тестовый массив `p` для демонстрации
+        var p = window.p || [
+            {x: 10, y: 10, radius: 5},
+            {x: 20, y: 20, radius: 10}
+        ];
+
+        // Функция для изменения параметров рисования
+        function modifyDrawing() {
+            // Сохраняем оригинальные параметры заливки и прозрачности
+            var originalFillStyle = ctx.fillStyle;
+            var originalGlobalAlpha = ctx.globalAlpha;
+
+            // Изменяем параметры функции f(t)
+            function f(t) {
+                ctx.beginPath();
+                ctx.fillStyle = "#ffffff"; // Белый цвет заливки
+                ctx.globalAlpha = 0.9; // Прозрачность 0.9
+
+                p.forEach(function(e) {
+                    // Проверяем наличие координат и радиуса в объекте
+                    if (e.x !== undefined && e.y !== undefined && e.radius !== undefined) {
+                        var newX = e.x * 4; // Увеличиваем координаты x в 4 раза
+                        var newY = e.y * 4; // Увеличиваем координаты y в 4 раза
+                        var newRadius = e.radius * 4; // Увеличиваем радиус в 4 раза
+
+                        ctx.moveTo(newX, newY);
+                        ctx.arc(newX, newY, newRadius, 0, 2 * Math.PI);
+                    } else {
+                        console.warn('Неправильный формат объекта в массиве p:', e);
+                    }
+                });
+
+                ctx.fill();
+
+                // Восстанавливаем оригинальные параметры заливки и прозрачности
+                ctx.fillStyle = originalFillStyle;
+                ctx.globalAlpha = originalGlobalAlpha;
+            }
+
+            // Вызываем функцию f(t) для изменения рисунка
+            f();
+        }
+
+        // Запускаем функцию изменения рисования
+        modifyDrawing();
+    });
+
+})();
 
 
 
@@ -998,13 +1060,13 @@ function handleMousedown(event) {
     let button;
     switch (event.button) {
         case 0:
-            button = 'ЛКМ';
+            button = 'LMB';
             break;
         case 1:
-            button = 'СКМ';
+            button = 'MMB';
             break;
         case 2:
-            button = 'ПКМ';
+            button = 'RMB';
             break;
         default:
             button = 'Mouse Click';
@@ -1200,4 +1262,4 @@ function setupAccountBelow() {
     setupAccountBelow();
 })();
     }
-    setTimeout(startTimer, 1500);
+    setTimeout(startTimer, 1488);
