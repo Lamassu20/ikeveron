@@ -1,3 +1,4 @@
+
     function startTimer() {
        var zindexForContainerAndSocialFix = document.createElement("style");
        zindexForContainerAndSocialFix.appendChild(document.createTextNode(`
@@ -345,8 +346,10 @@ input[type=number]:disabled,input[type=text]:disabled,select:disabled {    color
 .lobby-list>.row[data-v-fa675f88] {    border-bottom: 2px solid #fff0;    cursor: pointer;    display: flex;    justify-content: space-between;    padding: 10px}
 .tab-menu .tab[data-v-752a3ab7]:not(:last-child) {    border-right: 2px solid #fff0}
 .tab-menu .tabs[data-v-752a3ab7] {    border-bottom: 2px solid #fff0;    display: flex;    font-size: 18px}
-.server-list-item[data-v-752a3ab7] {    border-bottom: 2px solid #fff0;    background: #ffffff00;    border: 0;    border-radius: 0px;   box-shadow: 0 0 4px 2px #0000;    color: #ffffffba;    text-shadow: 0 0 2px #fff0;    cursor: pointer;  display: flex;    padding: 10px;    user-select: none}
+.server-list-item[data-v-752a3ab7] {    position: relative;    border-bottom: 0px solid #fff0;    cursor: pointer;    display: flex;    padding: 10px;    user-select: none;    overflow: hidden;}
 .server-list-item[data-v-752a3ab7]:hover {    transition: .2s cubic-bezier(0.4, 0, 1, 1);    background: #ffffff00;    color: #ffffffc4;    text-shadow: 0 0 3px #ffffffc4;}
+.server-list-item[data-v-752a3ab7]:hover::before {    content: '';    position: absolute;    top: 0;    left: -100%;    width: 100%;    height: 100%;        background: repeating-linear-gradient(0deg,#ffffff08,#ffffff08, #ffffff08); animation: slide-left .72s forwards;}
+@keyframes slide-left {    100% {      left: 100%;}}
 .server-list-item.active[data-v-752a3ab7],.server-list-item.active[data-v-752a3ab7]:hover {    background: #ffffff00;    color: #fff;    text-shadow: 0px 0px 7px #fff;}
 #hotkey-container .row[data-v-14acee54]:not(:last-child) {    border-bottom: 2px solid #fff0}
 #hotkey-container .footer[data-v-14acee54] {    border-top: 2px solid #fff0;    color: white;    display: flex;    justify-content: center;    padding: 10px}
